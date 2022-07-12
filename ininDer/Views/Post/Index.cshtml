@@ -1,0 +1,225 @@
+﻿
+<div class="container row" id="post"></div>
+
+
+
+<div class="modal" tabindex="-1" role="dialog"  style="display:none"id="match">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Correct Answer</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closematch()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p> People profile (name ,intro, more pics, etc ...)</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="match()">Match</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closematch()">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+	<div class="modal" tabindex="-1" role="dialog" style="display:none" id="notmatch">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">wrong Answer</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closenotmatch()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p> Say something etc</p>
+				</div>
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"onclick="closenotmatch()">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+@section scripts {
+	<script>
+
+		var str = "";
+		var youid = '';
+	$(document).ready(function () {
+
+		$.ajax({
+		type: "POST",
+		url: '@Url.Action("GetPost", "Post")',
+
+		dataType: "json",
+			success: function (data) {
+
+
+			if (data) {
+				var len = data.length;
+
+
+				for (var i = 0; i < len; i ++) {
+
+					let random = Math.floor(Math.random() * 4);
+
+					if (random == 0) {
+						var Ca = data[i].a1;
+						var A1 = data[i].ca;
+						var A2 = data[i].a2;
+						var A3 = data[i].a3;
+					}
+					else if (random == 1) {
+						var Ca = data[i].a2;
+						var A2 = data[i].ca;
+						var A1 = data[i].a1;
+						var A3 = data[i].a3;
+					}
+					else if (random == 2) {
+						var Ca = data[i].a3;
+						var A3 = data[i].ca;
+						var A2 = data[i].a2;
+						var A1 = data[i].a1;
+					}
+					else  {
+						var Ca = data[i].ca;
+						var A1 = data[i].a1;
+						var A2 = data[i].a2;
+						var A3 = data[i].a3;
+					}
+
+					var Q = data[i].q;
+					var UserId = data[i].userId;
+
+					var ImageName = "data/" + data[i].imageName;
+
+
+
+
+
+
+
+
+
+					str += '<div class="col-sm-4">';
+					str += '<div class="card" style="width: 18rem;">';
+					str += '<img class="card-img-top" src= ' + ImageName + ' style="width: 18rem; height: 20rem;" >'
+					str += '<div class="card-body">'
+					str += '<h5 class="card-title">'+Q+'</h5>'
+					str += '<input type="radio" value= '+ A1 + 'id=' + UserId+ ' onchange = "getInfo(event)" ><label>'+A1+'</label><br>'
+					str += '<input type="radio" value= ' + A2 + 'id=' + UserId + ' onchange = "getInfo(event)" ><label>' + A2 + '</label><br>'
+					str += '<input type="radio" value= ' + A3 + 'id=' + UserId + ' onchange = "getInfo(event)" ><label>' + A3 + '</label><br>'
+					str += '<input type="radio" value= ' + Ca + 'id=' + UserId + ' onchange = "getInfo(event)" ><label>' + Ca + '</label><br>'
+					str += '</div></div></div>'
+
+
+
+
+
+
+
+
+
+				}
+
+				$("#post").append(str);
+			}
+
+
+
+
+
+        }
+
+    });
+
+
+	});
+
+
+
+
+
+
+
+
+	function getInfo(event) {
+
+		var myselect = event.target.value.split('id=');
+		var ans = myselect[0];
+		youid = myselect[1];
+		var ca = '';
+
+
+
+
+		$.ajax({
+		type: "POST",
+		url: '@Url.Action("GetAnswer", "Post")',
+		async: false,
+		data: {"id": youid},
+		dataType: "json",
+			success: function (data) {
+
+				if (data) {
+					ca = data[0].ca;
+
+				}
+			}
+		});
+
+
+
+
+
+		document.getElementById("post").style.display = "none";
+
+		if (ans == ca) {
+			document.getElementById("match").style.display = "flex";
+		}
+		else
+			document.getElementById("notmatch").style.display = "flex";
+
+
+
+
+
+	}
+
+	function closematch() {
+		document.getElementById("match").style.display = "none";
+		document.getElementById("post").style.display = "flex";
+	}
+
+	function closenotmatch() {
+		document.getElementById("notmatch").style.display = "none";
+		document.getElementById("post").style.display = "flex";
+	}
+
+
+		function match() {
+
+			document.getElementById("match").style.display = "none";
+			document.getElementById("post").style.display = "flex";
+
+		$.ajax({
+		type: "POST",
+		url: '@Url.Action("Match", "Post")',
+		async: false,
+		data: {"User_1" : myid, "User_2": youid},
+		dataType: "json"
+
+		});
+
+		}
+
+
+
+	</script>
+}

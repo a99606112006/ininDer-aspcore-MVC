@@ -1,8 +1,130 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<div class="container">
+	<div class="row">
+		<div class="col-5">
+			<div id="login" class="login btn btn-outline-primary" style="color:orange">
+				Log in
+			</div>
+		</div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+		<div class="col">
+			<div id="register" class="register btn btn-outline-primary" style="color:green">
+				Register
+			</div>
+		</div>
+	</div>
+
+	<div id="loginDiv" class="row loginDiv">
+
+
+		<div class="row">
+			<div class="col-4">
+				Email
+			</div>
+			<div class="col-8">
+
+				<input type="text">
+			</div>
+
+			<div class="col-4">
+				Password
+			</div>
+			<div class="col-8">
+
+				<input type="text">
+			</div>
+
+			<div class="col-3"></div>
+			<button class="btn btn-light">
+				Login
+			</button>
+
+
+
+
+		</div>
+
+
+
+	</div>
+
+
+
+	<div id="registerDiv" class="row registerDiv">
+
+		<form>
+			<div class="row">
+				<div class="col-4">
+					Email
+				</div>
+				<div class="col-8">
+
+					<input type="text">
+				</div>
+
+
+				<div class="col-4">
+					Password
+				</div>
+				<div class="col-8">
+
+					<input type="text">
+				</div>
+
+				<div class="col-3"></div>
+				<button class="btn btn-light">
+					Register
+				</button>
+
+
+
+
+			</div>
+
+
+		</form>
+	</div>
+
+	<script>
+
+
+		window.addEventListener('DOMContentLoaded', function () {
+
+			var login = document.getElementById('login');
+			var loginvalue = document.getElementById('login').value;
+			login.classList.add("selected");
+			var register = document.getElementById('register');
+			var registervalue = document.getElementById('register').value;
+			var loginDiv = document.getElementById('loginDiv');
+			var registerDiv = document.getElementById('registerDiv');
+			registerDiv.style.display = "none";
+			var loginButton = document.getElementById('update-button');
+			var registerButton = document.getElementById('search-button');
+
+			register.addEventListener('click', function () {
+				register.classList.add("selected");
+				login.classList.remove("selected");
+				loginDiv.style.display = "none";
+				registerDiv.style.display = "block";
+			});
+
+			login.addEventListener('click', function () {
+
+
+
+				register.classList.remove("selected");
+				loginDiv.style.display = "block";
+				registerDiv.style.display = "none";
+
+			});
+
+		})
+
+
+
+
+
+
+
+
+
+	</script>
